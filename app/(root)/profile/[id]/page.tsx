@@ -63,7 +63,9 @@ async function Page({ params }: { params: { id: string } }) {
                 accountType="User"
               />
             </TabsContent>
+            
           ))}
+          
         </Tabs>
       </div>
     </section>
