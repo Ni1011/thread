@@ -1,6 +1,7 @@
 import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import DeleteThread from "../forms/DeleteThread";
 
 interface Props {
   id: string;
@@ -107,7 +108,7 @@ const ThreadCard = ({
               {isComment && comments.length > 0 && (
                 <Link href={`/thread/${id}`}>
                   <p className="mt-1 text-subtle-medium text-gray-1">
-                    {comments.length} {comments.length > 1 ? "replies" : "y"}
+                    {comments.length} {comments.length > 0 ? "replies" : " "}
                   </p>
                 </Link>
               )}
@@ -115,8 +116,34 @@ const ThreadCard = ({
           </div>
         </div>
         {/* TODO: Delete a thread */}
-        {/* TODO: Show comment logos */}
+        <DeleteThread
+          threadId={JSON.stringify(id)}
+          currentUserId={currentUserId}
+          authorId={author.id}
+          parentId={parentId}
+          isComment={isComment}
+        />
       </div>
+      {/* TODO: Show comment logos */}
+      {!isComment && comments.length > 0 && (
+        <div className="ml-1 mt-3 flex items-center gap-2 ">
+          {comments.slice(0, 2).map((comment, index) => (
+            <Image
+              key={index}
+              src={comment.author.image}
+              alt={`user_${index}`}
+              width={28}
+              height={28}
+              className={`${index !== 0 && "-ml-5"} rounded-full object-cover`}
+            />
+          ))}
+          <Link href={`/thread/${id}`}>
+            <p className="mt-1 text-subtle-medium text-gray-1">
+              {comments.length} {comments.length > 0 ? "replies" : " "}
+            </p>
+          </Link>
+        </div>
+      )}
       {!isComment && community && (
         <Link
           href={`/communities/${community.id}`}
